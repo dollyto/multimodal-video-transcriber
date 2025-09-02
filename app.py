@@ -307,7 +307,7 @@ def main():
                 st.success("✅ Transcription completed successfully!")
                 
             except Exception as e:
-                st.error(f"❌ Error during transcription: {str(e)}")
+                st.error(f"Error during transcription: {str(e)}")
                 progress_bar.empty()
                 status_text.empty()
     

@@ -91,7 +91,7 @@ class VideoTranscriber:
         
         # Check if YouTube URL is supported
         if not self.client.vertexai and not video_uri.startswith("https://www.youtube.com/watch?v="):
-            print("❌ Google AI Studio API: Only YouTube URLs are currently supported")
+            print("Google AI Studio API: Only YouTube URLs are currently supported")
             return None
         
         file_data = FileData(file_uri=video_uri, mime_type="video/*")
@@ -154,7 +154,10 @@ class VideoTranscriber:
         if not isinstance(err, ClientError):
             return False
         
-        print(f"❌ ClientError {err.code}: {err.message}")
+        try:
+            print(f"❌ ClientError {err.code}: {err.message}")
+        except UnicodeEncodeError:
+            print(f"ClientError {err.code}: {err.message.encode('ascii', 'replace').decode()}")
         
         retry = False
         if err.code == 400 and err.message and " try again " in err.message:
@@ -245,20 +248,20 @@ class VideoTranscriber:
                 print(f"Thoughts tokens: {usage_metadata.thoughts_token_count:9,d}")
         
         if not response.candidates:
-            print("❌ No `response.candidates`")
+            print("No `response.candidates`")
             return
         
         if (finish_reason := response.candidates[0].finish_reason) != FinishReason.STOP:
-            print(f"❌ {finish_reason = }")
+            print(f"Finish reason: {finish_reason}")
         
         if not response.text:
-            print("❌ No `response.text`")
+            print("No `response.text`")
             return
     
     def _parse_response(self, response: GenerateContentResponse) -> VideoTranscription:
         """Parse the response into a VideoTranscription object."""
         if not isinstance(response.parsed, VideoTranscription):
-            print("❌ Could not parse the JSON response")
+            print("Could not parse the JSON response")
             return VideoTranscription()
         
         transcription = response.parsed
