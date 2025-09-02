@@ -64,4 +64,6 @@ class Config:
     @classmethod
     def get_service_name(cls) -> str:
         """Get the service name being used."""
-        return "Vertex AI" if cls.GOOGLE_GENAI_USE_VERTEXAI else "Google AI Studio"
+        # Check environment variables directly to handle UI configuration
+        use_vertex_ai = os.getenv("GOOGLE_GENAI_USE_VERTEXAI", "False").lower() == "true"
+        return "Vertex AI" if use_vertex_ai else "Google AI Studio"

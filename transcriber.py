@@ -2,6 +2,7 @@
 Main transcriber module for multimodal video transcription using Google Gemini.
 """
 
+import os
 import re
 from datetime import timedelta
 from typing import Optional, List
@@ -27,15 +28,23 @@ class VideoTranscriber:
     
     def __init__(self, skip_config_validation: bool = False):
         """Initialize the transcriber."""
-        # Setup configuration
-        Config.setup_environment()
-        
-        # Skip validation if configuration is handled externally (e.g., UI)
-        if not skip_config_validation and not Config.validate_config():
-            raise ValueError("Invalid configuration. Please check your environment variables.")
+        # Setup configuration only if not skipping validation
+        if not skip_config_validation:
+            Config.setup_environment()
+            
+            if not Config.validate_config():
+                raise ValueError("Invalid configuration. Please check your environment variables.")
         
         # Initialize Gemini client
-        self.client = genai.Client()
+        # Always check for API key in environment first, regardless of skip_config_validation
+        api_key = os.getenv("GOOGLE_API_KEY")
+        if api_key:
+            # Ensure the API key is set in environment for the client
+            os.environ["GOOGLE_API_KEY"] = api_key
+            self.client = genai.Client(api_key=api_key)
+        else:
+            self.client = genai.Client()
+        
         self.service_name = Config.get_service_name()
         
         print(f"✅ Using {self.service_name} API")
