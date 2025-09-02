@@ -1,6 +1,17 @@
-# Multimodal Video Transcriber
+# 🎬 Multimodal Video Transcriber
 
-A powerful video transcription tool that uses Google's Gemini model to transcribe videos with detailed speaker identification, following the approach from the [Towards Data Science article](https://towardsdatascience.com/unlocking-multimodal-video-transcription-with-gemini/).
+[![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.28+-red.svg)](https://streamlit.io/)
+[![Google Gemini](https://img.shields.io/badge/Google%20Gemini-2.0+-green.svg)](https://ai.google.dev/gemini)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Tests](https://github.com/dollyto/multimodal-video-transcriber/workflows/Test/badge.svg)](https://github.com/dollyto/multimodal-video-transcriber/actions)
+[![Deploy](https://img.shields.io/badge/Deploy-Render-blue.svg)](https://render.com/)
+
+A powerful multimodal video transcription system using Google's Gemini AI model. This solution combines audio and visual cues to provide detailed speaker identification, diarization, and comprehensive transcription results.
+
+[🌐 Live Demo](https://multimodal-video-transcriber.onrender.com) | [📖 Documentation](https://github.com/dollyto/multimodal-video-transcriber#readme) | [🚀 Deploy](https://github.com/dollyto/multimodal-video-transcriber/blob/main/DEPLOYMENT.md)
+
+Based on the [Towards Data Science article](https://towardsdatascience.com/unlocking-multimodal-video-transcription-with-gemini/) by Laurent Picard.
 
 ## ✨ Features
 
@@ -31,16 +42,48 @@ The project follows a modular architecture:
 
 ## 🚀 Quick Start
 
-### 1. Installation
+### Option 1: Web Interface (Recommended)
 
-```bash
-# Clone the repository
-git clone <repository-url>
-cd transcriber
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/dollyto/multimodal-video-transcriber.git
+   cd multimodal-video-transcriber
+   ```
 
-# Install dependencies
-pip install -r requirements.txt
-```
+2. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Set up environment**:
+   ```bash
+   cp test_env.txt .env
+   # Edit .env with your API key from https://aistudio.google.com/app/apikey
+   ```
+
+4. **Run the web app**:
+   ```bash
+   streamlit run app.py
+   ```
+
+5. **Open your browser**: http://localhost:8501
+
+### Option 2: Command Line Interface
+
+1. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. **Set environment variable**:
+   ```bash
+   export GOOGLE_API_KEY=your_api_key_here
+   ```
+
+3. **Run transcription**:
+   ```bash
+   python main.py --youtube 0pJn3g8dfwk
+   ```
 
 ### 2. Configuration
 
@@ -279,7 +322,38 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 ```
 
+## 🧪 Local Testing
+
+Before deploying, test your setup locally:
+
+```bash
+# Run the test script
+python test_local.py
+
+# Expected output:
+# ✅ All modules imported successfully
+# ✅ Transcriber initialized
+# ✅ Visualizer initialized
+# ✅ Streamlit works
+# 🎉 All tests passed!
+```
+
+For detailed local testing instructions, see [LOCAL_TESTING.md](LOCAL_TESTING.md).
+
+## 🚀 Deployment
+
+Deploy your transcriber to the cloud:
+
+- **[Render](DEPLOYMENT.md#render)** (Recommended - Free tier)
+- **[Railway](DEPLOYMENT.md#railway)** (Good for production)
+- **[Streamlit Cloud](DEPLOYMENT.md#streamlit-cloud)** (Native hosting)
+- **[Heroku](DEPLOYMENT.md#heroku)** (Legacy support)
+
+For detailed deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md).
+
 ## 🤝 Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 1. Fork the repository
 2. Create a feature branch
