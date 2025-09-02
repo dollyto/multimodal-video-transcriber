@@ -24,7 +24,7 @@ def test_transcriber():
     try:
         # Initialize transcriber
         print("🔧 Initializing transcriber...")
-        transcriber = VideoTranscriber()
+        transcriber = VideoTranscriber(skip_config_validation=False)  # Use validation for CLI testing
         
         # Test with a short YouTube video
         print("🎬 Testing with YouTube video...")

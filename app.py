@@ -220,7 +220,8 @@ def main():
                 status_text.text("Initializing transcriber...")
                 progress_bar.progress(10)
                 
-                transcriber = VideoTranscriber()
+                # Initialize transcriber with config validation skipped since we set env vars in the UI
+                transcriber = VideoTranscriber(skip_config_validation=True)
                 status_text.text("Processing video...")
                 progress_bar.progress(30)
                 

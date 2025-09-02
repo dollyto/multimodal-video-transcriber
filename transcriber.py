@@ -25,11 +25,13 @@ from models import VideoTranscription, TranscriptSegment, Speaker
 class VideoTranscriber:
     """Main class for video transcription using Google Gemini."""
     
-    def __init__(self):
+    def __init__(self, skip_config_validation: bool = False):
         """Initialize the transcriber."""
         # Setup configuration
         Config.setup_environment()
-        if not Config.validate_config():
+        
+        # Skip validation if configuration is handled externally (e.g., UI)
+        if not skip_config_validation and not Config.validate_config():
             raise ValueError("Invalid configuration. Please check your environment variables.")
         
         # Initialize Gemini client

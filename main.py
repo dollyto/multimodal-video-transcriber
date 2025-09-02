@@ -59,7 +59,7 @@ Examples:
     
     try:
         # Initialize transcriber
-        transcriber = VideoTranscriber()
+        transcriber = VideoTranscriber(skip_config_validation=False)
         visualizer = TranscriptionVisualizer()
         
         # Prepare video URI
@@ -126,7 +126,7 @@ def demo():
     
     try:
         # Initialize transcriber
-        transcriber = VideoTranscriber()
+        transcriber = VideoTranscriber(skip_config_validation=False)
         visualizer = TranscriptionVisualizer()
         
         # Example 1: Short YouTube video

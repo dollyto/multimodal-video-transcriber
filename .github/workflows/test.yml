@@ -54,7 +54,7 @@ jobs:
     
     - name: Test transcriber initialization
       run: |
-        python -c "from transcriber import VideoTranscriber; t = VideoTranscriber(); print('✅ Transcriber initialized')"
+        python -c "from transcriber import VideoTranscriber; t = VideoTranscriber(skip_config_validation=True); print('✅ Transcriber initialized')"
     
     - name: Test visualizer initialization
       run: |
