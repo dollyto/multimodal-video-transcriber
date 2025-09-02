@@ -1,0 +1,10 @@
+# Copy this to .env for local testing
+# Replace with your actual API key from https://aistudio.google.com/app/apikey
+
+GOOGLE_GENAI_USE_VERTEXAI=False
+GOOGLE_API_KEY=your_api_key_here
+
+# Optional: Vertex AI configuration (if using Vertex AI instead)
+# GOOGLE_GENAI_USE_VERTEXAI=True
+# GOOGLE_CLOUD_PROJECT=your_project_id
+# GOOGLE_CLOUD_LOCATION=global

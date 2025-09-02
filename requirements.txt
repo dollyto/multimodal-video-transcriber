@@ -1,0 +1,7 @@
+google-genai>=1.31.0
+pandas[output-formatting]>=2.0.0
+pydantic>=2.0.0
+tenacity>=8.0.0
+python-dotenv>=1.0.0
+streamlit>=1.28.0
+plotly>=5.15.0

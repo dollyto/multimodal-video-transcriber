@@ -1,0 +1,29 @@
+# Multimodal Video Transcriber Configuration
+# Copy this file to .env and fill in your actual values
+
+# API Configuration
+# Set to True for Vertex AI, False for Google AI Studio
+GOOGLE_GENAI_USE_VERTEXAI=False
+
+# Google AI Studio Configuration (when GOOGLE_GENAI_USE_VERTEXAI=False)
+# Get your API key from: https://aistudio.google.com/app/apikey
+GOOGLE_API_KEY=your_google_ai_studio_api_key_here
+
+# Vertex AI Configuration (when GOOGLE_GENAI_USE_VERTEXAI=True)
+# Your Google Cloud project ID
+GOOGLE_CLOUD_PROJECT=your_google_cloud_project_id
+# Google Cloud location (e.g., global, us-central1, europe-west1)
+GOOGLE_CLOUD_LOCATION=global
+
+# Optional: Model Configuration
+# Default model to use (can be overridden in code)
+# Options: gemini-2.0-flash, gemini-2.5-flash, gemini-2.5-pro
+# DEFAULT_MODEL=gemini-2.0-flash
+
+# Optional: Processing Configuration
+# Default frame rate for video processing (0.1-24.0)
+# DEFAULT_FPS=1.0
+
+# Optional: Output Configuration
+# Marker for unknown/not found values
+# NOT_FOUND_MARKER=?
