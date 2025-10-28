@@ -49,8 +49,10 @@ class VideoTranscriber:
         
         print(f"✅ Using {self.service_name} API")
     
-    def get_transcription_prompt(self, timecode_format: str = "MM:SS") -> str:
+    def get_transcription_prompt(self, timecode_format: str = None) -> str:
         """Get the transcription prompt with proper formatting."""
+        if timecode_format is None:
+            timecode_format = Config.DEFAULT_TIMECODE_FORMAT
         return f"""
 **Task 1 - Script Segments**
 
@@ -58,11 +60,21 @@ class VideoTranscriber:
 - Identify each unique voice using a `voice_id` (1, 2, 3, etc.).
 - Transcribe the video's audio verbatim with voice diarization.
 - Include the `start_time` and `end_time` timecodes ({timecode_format}) for each speech segment.
+- Analyze the emotion, tone, energy, and speech rate for each segment based on audio and visual cues.
+- For emotion: Detect the primary emotion (happy, sad, angry, neutral, excited, worried, frustrated, calm, etc.)
+- For tone: Identify the tone of voice (casual, formal, serious, playful, enthusiastic, sarcastic, empathetic, etc.)
+- For energy_level: Assess the energy level (low, medium, high)
+- For speech_rate: Determine the pace (slow, normal, fast)
+- If a piece of information cannot be determined, use `null` as the value.
 - Output a JSON array where each object has the following fields:
   - `start_time`
   - `end_time`
   - `text`
   - `voice_id`
+  - `emotion`
+  - `tone`
+  - `energy_level`
+  - `speech_rate`
 
 **Task 2 - Speakers**
 
@@ -170,8 +182,7 @@ class VideoTranscriber:
     
     def get_timecode_format(self, video_duration: Optional[timedelta] = None) -> str:
         """Get the appropriate timecode format based on video duration."""
-        if video_duration and video_duration >= timedelta(hours=1):
-            return Config.EXTENDED_TIMECODE_FORMAT
+        # Always return the default frame-based format
         return Config.DEFAULT_TIMECODE_FORMAT
     
     def transcribe_video(

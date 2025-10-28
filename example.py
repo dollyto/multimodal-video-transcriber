@@ -65,14 +65,14 @@ def example_custom_model():
     return transcription
 
 def example_custom_prompt():
-    """Example 4: Using a custom transcription prompt."""
-    print("\n🎬 Example 4: Custom Prompt")
+    """Example 4: Using a custom transcription prompt with emotion and tonality."""
+    print("\n🎬 Example 4: Custom Prompt with Emotion/Tonality Detection")
     print("-" * 50)
     
     transcriber = VideoTranscriber()
     visualizer = TranscriptionVisualizer()
     
-    # Custom prompt for technical content
+    # Custom prompt for technical content with enhanced emotion/tonality detection
     custom_prompt = """
 **Task 1 - Technical Script Segments**
 
@@ -80,12 +80,22 @@ def example_custom_prompt():
 - Identify each unique voice using a `voice_id` (1, 2, 3, etc.).
 - Transcribe the video's audio verbatim with voice diarization.
 - Pay special attention to technical terms, proper nouns, and company names.
-- Include the `start_time` and `end_time` timecodes (MM:SS) for each speech segment.
+- Include the `start_time` and `end_time` timecodes (HH:MM:SS:FF) for each speech segment.
+- Analyze emotion, tone, energy level, and speech rate based on audio and visual cues.
+- For emotion: Detect primary emotion (happy, sad, angry, neutral, excited, worried, etc.)
+- For tone: Identify voice tone (casual, formal, serious, playful, enthusiastic, etc.)
+- For energy_level: Assess energy (low, medium, high)
+- For speech_rate: Determine pace (slow, normal, fast)
+- If information cannot be determined, use `null`
 - Output a JSON array where each object has the following fields:
   - `start_time`
   - `end_time`
   - `text`
   - `voice_id`
+  - `emotion`
+  - `tone`
+  - `energy_level`
+  - `speech_rate`
 
 **Task 2 - Technical Speakers**
 
@@ -109,7 +119,7 @@ def example_custom_prompt():
         end_offset=timedelta(minutes=3),
         custom_prompt=custom_prompt,
     )
-    visualizer.display_summary(transcription)
+    visualizer.display_full_transcription(transcription)
     
     return transcription
 
@@ -145,9 +155,56 @@ def example_data_analysis():
     
     return transcription
 
+def example_emotion_tonality_analysis():
+    """Example 6: Demonstrating emotion and tonality analysis for AI dubbing."""
+    print("\n🎬 Example 6: Emotion and Tonality Analysis for AI Dubbing")
+    print("-" * 50)
+    
+    transcriber = VideoTranscriber()
+    visualizer = TranscriptionVisualizer()
+    
+    # Transcribe a video segment to analyze emotion and tonality
+    youtube_id = "0pJn3g8dfwk"  # Google DeepMind Podcast Trailer
+    
+    transcription = transcriber.transcribe_youtube_video(
+        youtube_id,
+        start_offset=timedelta(seconds=0),
+        end_offset=timedelta(seconds=30),
+    )
+    
+    # Display full transcription with emotion/tonality data
+    visualizer.display_full_transcription(transcription)
+    
+    # Export to CSV for AI dubbing use case
+    visualizer.export_to_csv(transcription, "ai_dubbing_data")
+    
+    # Analyze emotion distribution
+    if transcription.script_segments:
+        emotions = [seg.emotion for seg in transcription.script_segments if seg.emotion]
+        tones = [seg.tone for seg in transcription.script_segments if seg.tone]
+        energies = [seg.energy_level for seg in transcription.script_segments if seg.energy_level]
+        
+        print(f"\n📊 Emotion Distribution:")
+        from collections import Counter
+        emotion_counts = Counter(emotions)
+        for emotion, count in emotion_counts.items():
+            print(f"   {emotion}: {count}")
+        
+        print(f"\n📊 Tone Distribution:")
+        tone_counts = Counter(tones)
+        for tone, count in tone_counts.items():
+            print(f"   {tone}: {count}")
+        
+        print(f"\n📊 Energy Level Distribution:")
+        energy_counts = Counter(energies)
+        for energy, count in energy_counts.items():
+            print(f"   {energy}: {count}")
+    
+    return transcription
+
 def example_error_handling():
-    """Example 6: Error handling and validation."""
-    print("\n🎬 Example 6: Error Handling")
+    """Example 7: Error handling and validation."""
+    print("\n🎬 Example 7: Error Handling")
     print("-" * 50)
     
     transcriber = VideoTranscriber()
@@ -182,6 +239,7 @@ def main():
         example_custom_model()
         example_custom_prompt()
         example_data_analysis()
+        example_emotion_tonality_analysis()
         example_error_handling()
         
         print("\n✅ All examples completed successfully!")

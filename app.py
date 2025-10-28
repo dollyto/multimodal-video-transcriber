@@ -158,7 +158,7 @@ def main():
 - Watch the video and listen carefully to the audio.
 - Identify each unique voice using a `voice_id` (1, 2, 3, etc.).
 - Transcribe the video's audio verbatim with voice diarization.
-- Include the `start_time` and `end_time` timecodes (MM:SS) for each speech segment.
+- Include the `start_time` and `end_time` timecodes (HH:MM:SS:FF) for each speech segment.
 - Output a JSON array where each object has the following fields:
   - `start_time`
   - `end_time`
@@ -266,7 +266,11 @@ def main():
                                 "start_time": seg.start_time,
                                 "end_time": seg.end_time,
                                 "text": seg.text,
-                                "voice_id": seg.voice_id
+                                "voice_id": seg.voice_id,
+                                "emotion": seg.emotion or "",
+                                "tone": seg.tone or "",
+                                "energy_level": seg.energy_level or "",
+                                "speech_rate": seg.speech_rate or ""
                             } for seg in transcription.script_segments
                         ])
                         
@@ -291,7 +295,11 @@ def main():
                                 "speaker_company": speaker.company if speaker else "?",
                                 "speaker_position": speaker.position if speaker else "?",
                                 "text": seg.text,
-                                "voice_id": seg.voice_id
+                                "voice_id": seg.voice_id,
+                                "emotion": seg.emotion or "",
+                                "tone": seg.tone or "",
+                                "energy_level": seg.energy_level or "",
+                                "speech_rate": seg.speech_rate or ""
                             })
                         
                         combined_df = pd.DataFrame(combined_data)
@@ -359,6 +367,10 @@ def main():
                     "Start Time": segment.start_time,
                     "End Time": segment.end_time,
                     "Speaker": speaker.name if speaker else f"Voice {segment.voice_id}",
+                    "Emotion": segment.emotion or "-",
+                    "Tone": segment.tone or "-",
+                    "Energy": segment.energy_level or "-",
+                    "Rate": segment.speech_rate or "-",
                     "Text": segment.text,
                     "Voice ID": segment.voice_id
                 })
@@ -385,8 +397,50 @@ def main():
             st.info("No data available for analytics.")
             return
         
+        # Emotion distribution
+        if transcription.script_segments and any(seg.emotion for seg in transcription.script_segments):
+            st.subheader("📊 Emotion Distribution")
+            emotion_data = [{"emotion": seg.emotion} for seg in transcription.script_segments if seg.emotion]
+            if emotion_data:
+                emotion_df = pd.DataFrame(emotion_data)
+                fig = px.pie(
+                    emotion_df,
+                    names="emotion",
+                    title="Emotion Distribution",
+                    color_discrete_sequence=px.colors.qualitative.Pastel
+                )
+                st.plotly_chart(fig, use_container_width=True)
+        
+        # Tone distribution
+        if transcription.script_segments and any(seg.tone for seg in transcription.script_segments):
+            st.subheader("🎭 Tone Distribution")
+            tone_data = [{"tone": seg.tone} for seg in transcription.script_segments if seg.tone]
+            if tone_data:
+                tone_df = pd.DataFrame(tone_data)
+                fig = px.bar(
+                    tone_df["tone"].value_counts(),
+                    title="Tone Distribution",
+                    color_discrete_sequence=px.colors.qualitative.Set3
+                )
+                fig.update_layout(xaxis_title="Tone", yaxis_title="Count")
+                st.plotly_chart(fig, use_container_width=True)
+        
+        # Energy level distribution
+        if transcription.script_segments and any(seg.energy_level for seg in transcription.script_segments):
+            st.subheader("⚡ Energy Level Distribution")
+            energy_data = [{"energy": seg.energy_level} for seg in transcription.script_segments if seg.energy_level]
+            if energy_data:
+                energy_df = pd.DataFrame(energy_data)
+                fig = px.bar(
+                    energy_df["energy"].value_counts(),
+                    title="Energy Level Distribution",
+                    color_discrete_sequence=px.colors.sequential.Viridis
+                )
+                fig.update_layout(xaxis_title="Energy Level", yaxis_title="Count")
+                st.plotly_chart(fig, use_container_width=True)
+        
         # Speaker distribution
-        st.subheader("Speaker Distribution")
+        st.subheader("👥 Speaker Distribution")
         if transcription.speakers:
             speaker_names = [sp.name if sp.name != "?" else f"Voice {sp.voice_id}" for sp in transcription.speakers]
             speaker_counts = []
@@ -454,6 +508,7 @@ def main():
         - **Multimodal Processing**: Combines audio and visual cues
         - **Speaker Diarization**: Identifies and tracks different speakers
         - **Speaker Information**: Extracts names, companies, positions, and roles
+        - **Emotion & Tonality Detection**: Analyzes emotion, tone, energy level, and speech rate for AI dubbing
         - **Multiple Input Sources**: YouTube, Cloud Storage, direct URLs
         - **Export Options**: JSON and CSV formats
         - **Multilingual Support**: Works with 100+ languages
@@ -465,9 +520,10 @@ def main():
         
         ### 📊 Output Format
         The transcriber produces structured data with:
-        - **Script Segments**: Timecoded transcription with speaker identification
+        - **Script Segments**: Timecoded transcription with speaker identification, emotion, tone, energy, and speech rate
         - **Speakers**: Detailed speaker information
         - **Translation Table**: Optional multilingual support
+        - **AI Dubbing Data**: Emotion, tone, energy level, and speech rate for voice synthesis
         
         ### 🔧 Configuration
         - **Google AI Studio**: Free tier for testing (requires API key)

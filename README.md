@@ -18,13 +18,15 @@ Based on the [Towards Data Science article](https://towardsdatascience.com/unloc
 - **Multimodal Transcription**: Combines audio and visual cues for comprehensive transcription
 - **Speaker Diarization**: Identifies and tracks different speakers throughout the video
 - **Speaker Information**: Extracts names, companies, positions, and roles
+- **Emotion & Tonality Detection**: Analyzes emotion, tone, energy level, and speech rate for AI dubbing
 - **Flexible Input Sources**: Supports YouTube URLs, Google Cloud Storage, and direct video URLs
-- **Timecode Support**: Precise MM:SS and H:MM:SS timecode formatting
+- **Timecode Support**: Frame-accurate HH:MM:SS:FF timecode formatting (hours:minutes:seconds:frames)
 - **Multiple Models**: Support for Gemini 2.0 Flash, 2.5 Flash, and 2.5 Pro
-- **Export Options**: JSON and CSV export capabilities
+- **Export Options**: JSON and CSV export capabilities with emotion/tonality data
 - **Multilingual Support**: Works with 100+ languages
 - **Video Segments**: Transcribe specific portions of videos
 - **Custom Prompts**: Use custom prompts for specialized content
+- **AI Dubbing Ready**: Export emotion and tonality data for voice synthesis systems
 
 ## 🏗️ Architecture
 
@@ -192,10 +194,14 @@ The transcriber produces structured output with the following components:
 ### Script Segments
 ```json
 {
-  "start_time": "00:02",
-  "end_time": "00:05", 
+  "start_time": "00:00:02:00",
+  "end_time": "00:00:05:00", 
   "text": "Hello, welcome to our podcast.",
-  "voice_id": 1
+  "voice_id": 1,
+  "emotion": "happy",
+  "tone": "casual",
+  "energy_level": "medium",
+  "speech_rate": "normal"
 }
 ```
 
@@ -232,7 +238,7 @@ The transcriber produces structured output with the following components:
 ### Processing Options
 
 - **FPS**: Custom frame rate (0.1-24.0, default: 1.0)
-- **Timecodes**: MM:SS or H:MM:SS format
+- **Timecodes**: HH:MM:SS:FF format (hours:minutes:seconds:frames)
 - **Media Resolution**: Low (66 tokens/frame) or Medium (258 tokens/frame)
 - **Video Segments**: Specify start and end times
 
@@ -245,7 +251,7 @@ custom_prompt = """
 **Task 1 - Technical Script Segments**
 - Watch the video and listen carefully to the audio.
 - Pay special attention to technical terms and proper nouns.
-- Include the `start_time` and `end_time` timecodes (MM:SS) for each speech segment.
+- Include the `start_time` and `end_time` timecodes (HH:MM:SS:FF) for each speech segment.
 - Output a JSON array where each object has: `start_time`, `end_time`, `text`, `voice_id`
 
 **Task 2 - Technical Speakers**

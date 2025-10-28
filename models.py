@@ -10,18 +10,26 @@ from config import Config
 
 class TranscriptSegment(pydantic.BaseModel):
     """Represents a single transcript segment."""
-    start_time: str = pydantic.Field(description="Start time in MM:SS or H:MM:SS format")
-    end_time: str = pydantic.Field(description="End time in MM:SS or H:MM:SS format")
+    start_time: str = pydantic.Field(description="Start time in HH:MM:SS:FF format (hours:minutes:seconds:frames)")
+    end_time: str = pydantic.Field(description="End time in HH:MM:SS:FF format (hours:minutes:seconds:frames)")
     text: str = pydantic.Field(description="Transcribed text")
     voice_id: int = pydantic.Field(description="Voice identifier for speaker diarization")
+    emotion: Optional[str] = pydantic.Field(default=None, description="Emotion detected: happy, sad, angry, neutral, excited, worried, etc.")
+    tone: Optional[str] = pydantic.Field(default=None, description="Tone of voice: casual, formal, serious, playful, enthusiastic, etc.")
+    energy_level: Optional[str] = pydantic.Field(default=None, description="Energy level: low, medium, high")
+    speech_rate: Optional[str] = pydantic.Field(default=None, description="Speech rate: slow, normal, fast")
     
     class Config:
         json_schema_extra = {
             "example": {
-                "start_time": "00:02",
-                "end_time": "00:05",
+                "start_time": "00:00:02:00",
+                "end_time": "00:00:05:00",
                 "text": "Hello, welcome to our podcast.",
-                "voice_id": 1
+                "voice_id": 1,
+                "emotion": "happy",
+                "tone": "casual",
+                "energy_level": "medium",
+                "speech_rate": "normal"
             }
         }
 
@@ -107,8 +115,8 @@ class VideoTranscription(pydantic.BaseModel):
             "example": {
                 "script_segments": [
                     {
-                        "start_time": "00:02",
-                        "end_time": "00:05",
+                        "start_time": "00:00:02:12",
+                        "end_time": "00:00:05:23",
                         "text": "Hello, welcome to our podcast.",
                         "voice_id": 1
                     }
@@ -123,7 +131,7 @@ class VideoTranscription(pydantic.BaseModel):
                     }
                 ],
                 "translation_table": [],
-                "video_duration": "00:05:30",
+                "video_duration": "00:05:30:00",
                 "total_segments": 1,
                 "total_speakers": 1,
                 "language_detected": "en"

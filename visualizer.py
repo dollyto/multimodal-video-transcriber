@@ -108,7 +108,7 @@ class TranscriptionVisualizer:
     def display_script_segments(self, transcription: VideoTranscription) -> None:
         """Display script segments table."""
         def yield_rows():
-            yield ["start_time", "end_time", "speaker", "text", self.bgcolor_column]
+            yield ["start_time", "end_time", "speaker", "emotion", "tone", "energy", "rate", "text", self.bgcolor_column]
             
             color_for_voice = self.get_color_for_voice_mapping(transcription.speakers)
             speaker_for_voice = {
@@ -138,6 +138,10 @@ class TranscriptionVisualizer:
                     segment.start_time,
                     segment.end_time,
                     display_speaker,
+                    segment.emotion or "-",
+                    segment.tone or "-",
+                    segment.energy_level or "-",
+                    segment.speech_rate or "-",
                     segment.text,
                     color_for_voice.get(current_voice, "red"),
                 ]
@@ -220,6 +224,10 @@ class TranscriptionVisualizer:
                 "speaker_position": speaker.position if speaker else Config.NOT_FOUND_MARKER,
                 "text": segment.text,
                 "voice_id": segment.voice_id,
+                "emotion": segment.emotion or "",
+                "tone": segment.tone or "",
+                "energy_level": segment.energy_level or "",
+                "speech_rate": segment.speech_rate or "",
             })
         
         segments_df = pd.DataFrame(segments_data)
