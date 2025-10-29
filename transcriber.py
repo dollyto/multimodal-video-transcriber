@@ -42,12 +42,16 @@ class VideoTranscriber:
             # Ensure the API key is set in environment for the client
             os.environ["GOOGLE_API_KEY"] = api_key
             self.client = genai.Client(api_key=api_key)
+        elif skip_config_validation:
+            # For testing without API key, set client to None
+            self.client = None
         else:
             self.client = genai.Client()
         
         self.service_name = Config.get_service_name()
         
-        print(f"✅ Using {self.service_name} API")
+        if self.client:
+            print(f"✅ Using {self.service_name} API")
     
     def get_transcription_prompt(self, timecode_format: str = None) -> str:
         """Get the transcription prompt with proper formatting."""
