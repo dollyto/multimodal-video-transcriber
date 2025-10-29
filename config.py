@@ -31,8 +31,10 @@ class Config:
     MIN_FPS = 0.1
     
     # Timecode Configuration
-    DEFAULT_TIMECODE_FORMAT = "MM:SS"
+    FRAME_BASED_TIMECODE_FORMAT = "HH:MM:SS:FF"
+    DEFAULT_TIMECODE_FORMAT = "HH:MM:SS:FF"  # Frame-based format as default
     EXTENDED_TIMECODE_FORMAT = "H:MM:SS"
+    SIMPLE_TIMECODE_FORMAT = "MM:SS"
     
     # Output Configuration
     NOT_FOUND_MARKER = "?"
