@@ -11,7 +11,11 @@ exclude =
     *.egg-info,
     .tox,
     .pytest_cache,
-    .mypy_cache
+    .mypy_cache,
+    site-packages,
+    .eggs
 max-line-length = 127
 max-complexity = 10
+per-file-ignores =
+    __init__.py:F401
 

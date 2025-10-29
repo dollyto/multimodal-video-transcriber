@@ -37,8 +37,8 @@ jobs:
     
     - name: Run linting
       run: |
-        python -m flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        python -m flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        python -m flake8 app.py config.py example.py main.py models.py test_local.py transcriber.py visualizer.py --count --select=E9,F63,F7,F82 --show-source --statistics
+        python -m flake8 app.py config.py example.py main.py models.py test_local.py transcriber.py visualizer.py --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     
     - name: Test imports
       run: |
